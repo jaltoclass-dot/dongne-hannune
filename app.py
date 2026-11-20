@@ -1,5 +1,6 @@
 import math
 import requests
+from urllib.parse import quote
 import pandas as pd
 import streamlit as st
 import folium
@@ -53,8 +54,9 @@ def fetch_places(lat, lon, radius, selected_tuple, api_key):
     for category in selected_tuple:
         settings = CATEGORIES[category]
         for keyword in settings["queries"]:
+            # 한글 검색어를 UTF-8 URL 인코딩으로 변환해 HTTP 요청에 전달
+            encoded_keyword = quote(keyword, safe="", encoding="utf-8")
             params = {
-                "query": keyword,
                 "x": lon,
                 "y": lat,
                 "radius": radius,
@@ -66,7 +68,8 @@ def fetch_places(lat, lon, radius, selected_tuple, api_key):
                 params["category_group_code"] = settings["code"]
 
             try:
-                response = requests.get(KAKAO_URL, headers=headers, params=params, timeout=(5, 12))
+                request_url = f"{KAKAO_URL}?query={encoded_keyword}"
+                response = requests.get(request_url, headers=headers, params=params, timeout=(5, 12))
                 if response.status_code != 200:
                     try:
                         detail = response.json().get("msg", response.text[:200])
