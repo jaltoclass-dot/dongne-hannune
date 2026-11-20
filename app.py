@@ -34,12 +34,10 @@ CATEGORIES = {
 
 # 공공 서버가 한 곳에서 지연되면 다음 서버로 빠르게 넘어갑니다.
 OVERPASS_URLS = [
-   OVERPASS_URLS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.private.coffee/api/interpreter",
     "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ]
-
 def haversine(lat1, lon1, lat2, lon2):
     earth = 6371000
     p1, p2 = math.radians(lat1), math.radians(lat2)
